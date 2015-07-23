@@ -224,7 +224,7 @@ cdef dict decode_object(JSONStream stm):
             key = decode_string(stm)
             c = stm.next()
             if c != ':':
-                raise ValueError("missing ':'")
+                raise ValueError("Expecting ':' delimiter")
             value = decode_any(stm)
             r[key] = value
         elif c == '}':
