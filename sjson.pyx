@@ -10,12 +10,12 @@ cdef:
         'r': r'\r',
         't': r'\t'
     }
-    char* FLOAT_D = ['.', 'e', 'E']
+    char* FLOAT_D = '.eE'
     char* JSON_FALSE = 'false'
     char* JSON_NULL = 'null'
     char* JSON_TRUE = 'true'
-    char* NUMSTART = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '.']
-    char* NUMCHARS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '.', 'e', 'E']
+    char* NUMSTART = '1234567890-+.'
+    char* NUMCHARS = '1234567890-+.eE'
     list ESC_MAP_V = ['\b', '\f', '\n', '\r', '\t']
     list WS = [' ', '\b', '\f', '\n', '\r', '\t']
 
@@ -123,7 +123,7 @@ cdef decode_number(JSONStream stm):
     pos = stm.pos
     c = stm.next()
     while 1:
-        if not c or c not in NUMCHARS:
+        if c == '' or c not in NUMCHARS:
             if pos >= 1:
                 stm.previous()
             break
@@ -229,7 +229,7 @@ cdef dict decode_object(JSONStream stm):
             r[key] = value
         elif c == '}':
             return r
-        elif not c or not r:
+        elif c == '' or not r:
             raise ValueError("JSON data truncated")
 
 
@@ -254,7 +254,7 @@ cdef object decode_any(JSONStream stm):
     cdef basestring c
     skip_whitespace(stm)
     c = stm.next()
-    if not c:
+    if c == '':
         return None
     elif c == '"':
         return decode_string(stm)
