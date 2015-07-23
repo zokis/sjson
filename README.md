@@ -28,6 +28,7 @@ True
 
 
 Errors:
+-------
 ```text
 '[#'         -> Expected object, array or value
 '[1, , '     -> Expected object, array or value
